@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -10%;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 110%;
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header with glow effect */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-container {
+            display: inline-block;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .logo {
+            font-size: 80px;
+            filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.5),
+                         0 0 80px rgba(138, 43, 226, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.3em;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Login cards with neon effect */
+        .login-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 60px;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 40px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                        inset 0 0 50px rgba(255, 255, 255, 0.03);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease;
+            animation-fill-mode: both;
+        }
+
+        .login-card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .login-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .login-card:hover::before {
+            left: 100%;
+        }
+
+        .login-card:hover {
+            transform: translateY(-20px) rotateX(5deg);
+            box-shadow: 0 20px 60px 0 rgba(138, 43, 226, 0.5),
+                        inset 0 0 80px rgba(255, 255, 255, 0.1);
+            border-color: rgba(138, 43, 226, 0.5);
+        }
+
+        /* Avatar with neon glow */
+        .avatar-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 35px;
+            position: relative;
+        }
+
+        .avatar-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.7;
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.9;
+                box-shadow: 0 0 80px rgba(102, 126, 234, 1);
+            }
+        }
+
+        .avatar-inner {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            transition: all 0.4s ease;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-card:hover .avatar-inner {
+            transform: rotate(360deg) scale(1.1);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .avatar-inner svg {
+            width: 70px;
+            height: 70px;
+            filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        /* User card gradient */
+        .user-card .avatar-glow {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .user-card .avatar-inner {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        @keyframes pulse-glow-user {
+            0%, 100% {
+                box-shadow: 0 0 40px rgba(79, 172, 254, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 80px rgba(79, 172, 254, 1);
+            }
+        }
+
+        .user-card .avatar-glow {
+            animation: pulse-glow-user 2s ease-in-out infinite;
+        }
+
+        /* Card content */
+        .card-content h2 {
+            color: #fff;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .card-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* Neon button */
+        .neon-button {
+            width: 100%;
+            padding: 18px 40px;
+            background: transparent;
+            color: #fff;
+            border: 3px solid;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .admin-card .neon-button {
+            border-color: #667eea;
+            color: #667eea;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3),
+                        inset 0 0 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .user-card .neon-button {
+            border-color: #4facfe;
+            color: #4facfe;
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.8);
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3),
+                        inset 0 0 20px rgba(79, 172, 254, 0.1);
+        }
+
+        .neon-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .neon-button:hover::before {
+            left: 100%;
+        }
+
+        .admin-card .neon-button:hover {
+            background: #667eea;
+            color: #fff;
+            text-shadow: none;
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.8),
+                        inset 0 0 40px rgba(102, 126, 234, 0.3);
+            transform: scale(1.05);
+        }
+
+        .user-card .neon-button:hover {
+            background: #4facfe;
+            color: #fff;
+            text-shadow: none;
+            box-shadow: 0 0 40px rgba(79, 172, 254, 0.8),
+                        inset 0 0 40px rgba(79, 172, 254, 0.3);
+            transform: scale(1.05);
+        }
+
+        .neon-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Features with icons */
+        .features {
+            margin-top: 35px;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 1s; }
+        .feature-item:nth-child(2) { animation-delay: 1.2s; }
+        .feature-item:nth-child(3) { animation-delay: 1.4s; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .user-card .feature-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .logo {
+                font-size: 60px;
+            }
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .login-card {
+                padding: 50px 30px;
+            }
+
+            .card-content h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .card-content h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated particles background -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">📚</div>
+            </div>
+            <h1>LIBRARY PORTAL</h1>
+            <p>Your Digital Knowledge Gateway</p>
+        </div>
+
+        <!-- Login Cards -->
+        <div class="login-wrapper">
+            <!-- Admin Login -->
+            <div class="login-card admin-card">
+                <div class="avatar-container">
+                    <div class="avatar-glow"></div>
+                    <div class="avatar-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" fill="white">
+                            <path d="M96,40.32c-15.38812,0 -27.84,12.45188 -27.84,27.84c0,15.38813 12.45188,27.84 27.84,27.84c15.38813,0 27.84,-12.45187 27.84,-27.84c0,-15.38812 -12.45187,-27.84 -27.84,-27.84zM75.3375,105.7875c-26.29031,7.96594 -35.0175,29.58 -35.0175,29.58v16.3125h111.36v-16.3125c0,0 -8.72719,-21.61406 -35.0175,-29.58c-1.44094,10.14094 -10.14094,18.0525 -20.6625,18.0525c-10.52156,0 -19.22156,-7.91156 -20.6625,-18.0525z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <h2>Administrator</h2>
+                    <p>Manage the entire library system with advanced administrative controls</p>
+
+                    <button class="neon-button" onclick="location.href='admin_login.html'">
+                        🔐 ADMIN ACCESS
+                    </button>
+
+                    <div class="features">
+                        <div class="feature-item">
+                            <div class="feature-icon">⚙️</div>
+                            <span>System Configuration</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <span>Analytics & Reports</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">👥</div>
+                            <span>User Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Login -->
+            <div class="login-card user-card">
+                <div class="avatar-container">
+                    <div class="avatar-glow"></div>
+                    <div class="avatar-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" fill="white">
+                            <path d="M96,40.32c-15.38812,0 -27.84,12.45188 -27.84,27.84c0,15.38813 12.45188,27.84 27.84,27.84c15.38813,0 27.84,-12.45187 27.84,-27.84c0,-15.38812 -12.45187,-27.84 -27.84,-27.84zM75.3375,105.7875c-26.29031,7.96594 -35.0175,29.58 -35.0175,29.58v16.3125h111.36v-16.3125c0,0 -8.72719,-21.61406 -35.0175,-29.58c-1.44094,10.14094 -10.14094,18.0525 -20.6625,18.0525c-10.52156,0 -19.22156,-7.91156 -20.6625,-18.0525z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <h2>Member Portal</h2>
+                    <p>Explore, borrow, and manage your personal reading collection</p>
+
+                    <button class="neon-button" onclick="location.href='usr_login.html'">
+                        📖 MEMBER ACCESS
+                    </button>
+
+                    <div class="features">
+                        <div class="feature-item">
+                            <div class="feature-icon">🔍</div>
+                            <span>Browse Catalog</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📚</div>
+                            <span>Borrow & Reserve</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📜</div>
+                            <span>Reading History</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="/__/firebase/6.0.2/firebase-app.js"></script>
+    <script src="/__/firebase/init.js"></script>
+
+    <script>
+        // Create animated particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

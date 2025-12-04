@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Retailers - Library Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        body::before {
+            top: -250px;
+            left: -250px;
+        }
+
+        body::after {
+            bottom: -250px;
+            right: -250px;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .profile-icon svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .header-title h1 {
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-title p {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Page title */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h2 {
+            color: white;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.15em;
+        }
+
+        /* Retailers grid */
+        .retailers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Retailer card */
+        .retailer-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+            position: relative;
+        }
+
+        .retailer-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .retailer-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .retailer-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .retailer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.7s;
+            z-index: 1;
+        }
+
+        .retailer-card:hover::before {
+            left: 100%;
+        }
+
+        .retailer-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Card header with image */
+        .card-header {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.95), transparent);
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            transition: transform 0.3s ease;
+        }
+
+        .retailer-card:hover .profile-image {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Card content */
+        .card-content {
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .retailer-name {
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-info {
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .info-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .info-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            flex: 1;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        /* Action buttons */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .secondary-button {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .secondary-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Badge */
+        .verified-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 3;
+        }
+
+        /* Add retailer button */
+        .add-retailer-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .add-retailer-button {
+            padding: 16px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            border: 3px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-retailer-button:hover {
+            background: white;
+            border-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+            }
+
+            .retailers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h2 {
+                font-size: 2em;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-button" onclick="location.href='admin_portal.html'">
+            ← Back to Portal
+        </button>
+
+        <div class="header-content">
+            <div class="profile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" fill="white">
+                    <path d="M96,40.32c-15.38812,0 -27.84,12.45188 -27.84,27.84c0,15.38813 12.45188,27.84 27.84,27.84c15.38813,0 27.84,-12.45187 27.84,-27.84c0,-15.38812 -12.45187,-27.84 -27.84,-27.84zM75.3375,105.7875c-26.29031,7.96594 -35.0175,29.58 -35.0175,29.58v16.3125h111.36v-16.3125c0,0 -8.72719,-21.61406 -35.0175,-29.58c-1.44094,10.14094 -10.14094,18.0525 -20.6625,18.0525c-10.52156,0 -19.22156,-7.91156 -20.6625,-18.0525z"/>
+                </svg>
+            </div>
+            <div class="header-title">
+                <h1>Library Management Portal</h1>
+                <p>Admin Dashboard</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Page header -->
+        <div class="page-header">
+            <h2>📚 Book Retailers</h2>
+            <p>Connect with verified book suppliers and retailers</p>
+        </div>
+
+        <!-- Retailers grid -->
+        <div class="retailers-grid">
+            <!-- Retailer 1 -->
+            <div class="retailer-card">
+                <div class="card-header">
+                    <span class="verified-badge">✓ Verified</span>
+                    <div class="profile-image">👨‍💼</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="retailer-name">Eva Israt</h3>
+                    
+                    <div class="contact-info">
+                        <div class="info-item">
+                            <div class="info-icon">📧</div>
+                            <span class="info-text">evaisrat@gmail.com</span>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">📱</div>
+                            <span class="info-text">+919001162690</span>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">🌐</div>
+                            <span class="info-text">www.google.com</span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="action-button primary-button" onclick="contactRetailer('rajandra1999@gmail.com')">
+                            📧 Email
+                        </button>
+                        <button class="action-button secondary-button" onclick="callRetailer('9001162690')">
+                            📞 Call
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Retailer 2 -->
+            <div class="retailer-card">
+                <div class="card-header">
+                    <span class="verified-badge">✓ Verified</span>
+                    <div class="profile-image">👨‍💼</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="retailer-name">Ms. Nur Anissya</h3>
+                    
+                    <div class="contact-info">
+                        <div class="info-item">
+                            <div class="info-icon">📧</div>
+                            <span class="info-text">nuraniissyaa@gmail.com</span>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">📱</div>
+                            <span class="info-text">+919885162690</span>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">🌐</div>
+                            <span class="info-text">www.google.com</span>
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="action-button primary-button" onclick="contactRetailer('deppo@gmail.com')">
+                            📧 Email
+                        </button>
+                        <button class="action-button secondary-button" onclick="callRetailer('9885162690')">
+                            📞 Call
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add retailer section -->
+        <div class="add-retailer-section">
+            <button class="add-retailer-button" onclick="addNewRetailer()">
+                ➕ Add New Retailer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Contact retailer via email
+        function contactRetailer(email) {
+            window.location.href = `mailto:${email}?subject=Book Purchase Inquiry&body=Hello, I would like to inquire about purchasing books for our library.`;
+        }
+
+        // Call retailer
+        function callRetailer(phone) {
+            window.location.href = `tel:+91${phone}`;
+        }
+
+        // Add new retailer
+        function addNewRetailer() {
+            alert('Add New Retailer feature coming soon!\n\nThis will open a form to add new book retailers to your network.');
+        }
+
+        // Add smooth scroll behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.retailer-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '1';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
