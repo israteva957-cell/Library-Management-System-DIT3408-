@@ -6,7 +6,6 @@ D – PROJECT EXECUTION
 
 
 3.1	Project Design and Coding
-System Flowchart (Mermaid – already provided earlier) Three Key Code Modules (taken and improved from the GitHub repo you linked: https://github.com/rajpra808/Library-Management-System)
 
 Module 1: Firebase Initialization & Real-time Connection
 JavaScript
