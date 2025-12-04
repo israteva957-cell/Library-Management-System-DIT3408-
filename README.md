@@ -2,7 +2,6 @@
 **DIT3408 IT Project Management – Group Project (20%)**  
 **Lecturer: Ms. Nur Anissya** | **Submission: 30 November 2025**
 
-<img src="./assets/cover-page.jpg" alt="CMC Cover Page" width="100%"/>
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Click_here-FF5722?style=for-the-badge&logo=firebase)](https://your-lms-2025.web.app)
 [![Firebase](https://img.shields.io/badge/Powered_by-Firebase-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com)
