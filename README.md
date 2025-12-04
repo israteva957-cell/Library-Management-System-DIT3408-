@@ -31,9 +31,4 @@ The system successfully digitizes all library operations using a beautiful, resp
 | Project Mgmt     | Smartsheet, GitHub Projects & Issues        |
 | Deployment       | Firebase Hosting (public URL)               |
 
-## Live System & Demo
-- Live URL: https://your-lms-2025.web.app
-- Demo Video (1:50): https://youtu.be/your-demo-link
-- Published Smartsheet: https://app.smartsheet.com/b/publish?EQBCT=xxxx
 
-## Repository Structure
